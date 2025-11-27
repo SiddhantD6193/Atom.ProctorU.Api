@@ -1,0 +1,14 @@
+// src/logger.js
+function info(message, meta) {
+  console.log(`[INFO] ${message}`, meta || '');
+}
+
+function warn(message, meta) {
+  console.warn(`[WARN] ${message}`, meta || '');
+}
+
+function error(message, meta) {
+  console.error(`[ERROR] ${message}`, meta || '');
+}
+
+module.exports = { info, warn, error };
