@@ -27,6 +27,9 @@ module.exports = function (router) {
       const accessToken = tokenResponse.body?.accessToken;
       if (!accessToken) ctx.throw(500, 'Failed to obtain access token from Auth API');
 
+      // 🔎 Log the access token for debugging
+      console.log(`[Middleware Controller] Obtained access token: ${accessToken}`);
+
       // Step 3: Forward to Admin API
       const forwardResponse = await adminApiRequest({
         url: `${appConfig.services.adminApi.host}${appConfig.services.adminApi.path}`,
@@ -42,9 +45,10 @@ module.exports = function (router) {
       // Step 4: Respond back safely
       ctx.status = forwardResponse.status || 200;
       ctx.type = 'application/json';
-      ctx.body = forwardResponse.body; // always plain JSON or text now
+      ctx.body = forwardResponse.body; // ✅ always plain JSON/text from helper
     } catch (err) {
       ctx.status = err.status || 500;
+      ctx.type = 'application/json';
       ctx.body = { message: err.message || 'Internal Server Error' };
     }
   });
